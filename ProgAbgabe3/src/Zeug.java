@@ -2,6 +2,17 @@
 // Pflanze, Fleich und Müll
 public class Zeug implements Leckerbissen {
 
+	String name;
+	Nahrungstyp typ;
+	int g;
+	
+	public Zeug (String name, Nahrungstyp typ, int g){
+		this.name = name;
+		this.typ = typ;
+		this.g= g;
+		
+		
+	}
 	@Override
 	public int getGramm() {
 		// TODO Auto-generated method stub
