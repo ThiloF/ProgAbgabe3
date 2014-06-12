@@ -28,7 +28,7 @@ public class Fisch implements Leckerbissen {
 		if (beute.getNahrungstyp() == Nahrungstyp.MUELL)
 			throw new MuellException("Muell kann nicht gefressen werden");
 
-		if ((geschmack == Esstyp.VEGANER || geschmack == Esstyp.VEGETARIER) && beute.getNahrungstyp() != Nahrungstyp.PFLANZE)
+		if ((geschmack == Esstyp.VEGANER || geschmack == Esstyp.VEGETARIER) && (beute.getNahrungstyp() != Nahrungstyp.PFLANZE))
 			throw new SchmecktNichtException("Beute muss Vegetarisch sein");
 
 		if ((geschmack == Esstyp.FISCHFRESSER) && beute.getNahrungstyp() != Nahrungstyp.FISCH)
