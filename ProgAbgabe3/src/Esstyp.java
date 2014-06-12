@@ -1,0 +1,6 @@
+
+public enum Esstyp {
+
+	VEGETARIA, VEGANER, FLEXITARIA, FISCHESSER, FLEISCHESSER;
+	
+}
