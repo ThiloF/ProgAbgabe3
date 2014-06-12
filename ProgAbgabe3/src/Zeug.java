@@ -1,6 +1,6 @@
 
 // Pflanze, Fleich und Müll
-public class Nahrung implements Leckerbissen {
+public class Zeug implements Leckerbissen {
 
 	@Override
 	public int getGramm() {
