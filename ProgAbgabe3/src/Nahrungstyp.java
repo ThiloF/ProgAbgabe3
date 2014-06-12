@@ -1,5 +1,5 @@
 
-public enum Nahrungstyp {
+public enum Nahrungstyp { 
 
 	PFLANZE, FISCH, FLEISCH, MUELL;
 	
