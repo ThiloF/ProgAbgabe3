@@ -1,0 +1,2 @@
+Seetang, PFLANZE, 100, 2
+Stiefel, MUELL, 10, 250
