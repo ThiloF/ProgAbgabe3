@@ -18,7 +18,6 @@ public class Fisch implements Leckerbissen {
 	}
 
 	
-	
 	public void fressen(Leckerbissen beute) throws EatYourFriendException, MuellException, SchmecktNichtException, SattException {
 		
 		if(aktGewicht >= maxAppetit)
