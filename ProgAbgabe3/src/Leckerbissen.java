@@ -5,6 +5,7 @@ public interface Leckerbissen {
 	public abstract boolean gefressen();
 	public abstract boolean istLebendig();
 	public abstract Nahrungstyp getNahrungstyp();
-	
+
+	public abstract String getName();
 	
 }

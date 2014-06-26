@@ -1,40 +1,49 @@
-
 // Pflanze, Fleich und Müll
 public class Zeug implements Leckerbissen {
 
-	String name;
-	Nahrungstyp typ;
-	int g;
-	
-	public Zeug (String name, Nahrungstyp typ, int g){
+	private String name;
+	private Nahrungstyp typ;
+	private int g;
+	private boolean lebendig;
+
+	public Zeug(String name, Nahrungstyp typ, int g) {
 		this.name = name;
 		this.typ = typ;
-		this.g= g;
-		
-		
+		this.g = g;
+
+		this.lebendig = true;
+		if (this.typ == Nahrungstyp.MUELL) {
+			lebendig = false;
+		}
 	}
+
 	@Override
 	public int getGramm() {
-		// TODO Auto-generated method stub
-		return 0;
+		return g;
 	}
 
 	@Override
 	public boolean gefressen() {
-		// TODO Auto-generated method stub
+		if (lebendig) {
+			lebendig = false;
+			return true;
+		}
 		return false;
 	}
 
 	@Override
 	public boolean istLebendig() {
-		// TODO Auto-generated method stub
-		return false;
+		return lebendig;
 	}
 
 	@Override
 	public Nahrungstyp getNahrungstyp() {
-		// TODO Auto-generated method stub
-		return null;
+		return typ;
+	}
+
+	@Override
+	public String getName() {
+		return name;
 	}
 
 }
