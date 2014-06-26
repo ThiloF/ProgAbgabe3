@@ -6,4 +6,5 @@ public interface Leckerbissen {
 	public abstract boolean istLebendig();
 	public abstract Nahrungstyp getNahrungstyp();
 	
+	
 }
