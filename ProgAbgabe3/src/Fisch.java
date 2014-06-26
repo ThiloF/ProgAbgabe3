@@ -22,7 +22,7 @@ public class Fisch implements Leckerbissen {
 		if(aktGewicht >= maxAppetit)
 			throw new SattException("Die Fette Sau ist satt");
 
-		if (typ == beute.getNahrungstyp())
+		if (name == beute.getName())
 			throw new EatYourFriendException(typ + " kann keinen Artgenossen vom gleichen Nahrungstp fressen");
 
 		if (beute.getNahrungstyp() == Nahrungstyp.MUELL)
@@ -60,13 +60,11 @@ public class Fisch implements Leckerbissen {
 
 	@Override
 	public boolean istLebendig() {
-		// TODO Auto-generated method stub
 		return lebendig;
 	}
 
 	@Override
 	public Nahrungstyp getNahrungstyp() {
-		// TODO Auto-generated method stub
 		return typ;
 	}
 	
