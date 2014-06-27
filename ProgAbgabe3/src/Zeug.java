@@ -26,6 +26,7 @@ public class Zeug implements Leckerbissen {
 	public boolean gefressen() {
 		if (lebendig) {
 			lebendig = false;
+			this.g = 0;
 			return true;
 		}
 		return false;

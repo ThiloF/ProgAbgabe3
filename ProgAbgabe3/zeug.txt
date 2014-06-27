@@ -1,7 +1,0 @@
-Seetang, PFLANZE, 100, 2
-Stiefel, MUELL, 10, 2500
-Algen, PFLANZE, 200, 1
-Krümel, PFLANZE, 50, 5
-Riesenplankton, FISCH, 500, 1
-Taucher, FLEISCH, 3, 80000
-Aaß, FLEISCH, 5, 1000

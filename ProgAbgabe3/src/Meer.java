@@ -1,11 +1,8 @@
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class Meer {
 
@@ -13,16 +10,9 @@ public class Meer {
 	private ArrayList<Fisch> fische = new ArrayList<Fisch>();
 	private ArrayList<String[]> fressakte = new ArrayList<String[]>();
 
-	public Meer() {
-		ladeFische(new File("fische.txt"));
-		ladeZeug(new File("zeug.txt"));
-		ladeGeschichte(new File("story.txt"));
-		/*
-		 * for (Leckerbissen l : inhalt) { System.out.println(l.toString() + l.getNahrungstyp()); }
-		 */
-
-		doStory();
-
+	public Meer(File acteurs, File scene) {
+		ladeFische(acteurs);
+		ladeGeschichte(scene);
 	}
 
 	private Leckerbissen find(String name) {
@@ -33,53 +23,41 @@ public class Meer {
 		return null;
 	}
 
-	private void doStory() {
-		Random random = new Random();
-		try {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(new File("out.txt")));
+	public void displayStory() {
 
-			for (String[] akt : fressakte) {
+		for (String[] akt : fressakte) {
 
-				Leckerbissen l1 = find(akt[0]);
-				Leckerbissen l2 = find(akt[1]);
+			Leckerbissen l1 = find(akt[0]);
+			Leckerbissen l2 = find(akt[1]);
 
-				if (l1 == null || l2 == null) {
-					System.err.println("Fressakt konnte nicht ausgeführt werden: " + akt[0] + " frisst " + akt[1]);
-				}
-
-				if (!(l1 instanceof Fisch))
-					continue;
-				Fisch fisch = (Fisch) l1;
-
-				try {
-					writer.write(fisch.getName() + ": ");
-					fisch.fressen(l2);
-					writer.write("hat gegessen: " + l2.getName());
-				} catch (MuellException | SchmecktNichtException | SattException | EatYourFriendException e) {
-					writer.write(e.getMessage());
-					// e.printStackTrace();
-				}
-				writer.newLine();
-
+			if (l1 == null || l2 == null) {
+				System.err.println("Fressakt konnte nicht ausgeführt werden: " + akt[0] + " frisst " + akt[1]);
 			}
 
-			// for (int i = 0; i < 10000; i++) {
-			// Fisch fisch = fische.get(random.nextInt(fische.size()));
-			// Leckerbissen leckerbissen = inhalt.get(random.nextInt(inhalt.size()));
-			// try {
-			// writer.write(fisch.getName() + ": ");
-			// fisch.fressen(leckerbissen);
-			// writer.write("hat gegessen: " + leckerbissen.getName());
-			// } catch (MuellException | SchmecktNichtException | SattException | EatYourFriendException e) {
-			// writer.write(e.getMessage());
-			// //e.printStackTrace();
-			// }
-			// writer.newLine();
-			// }
-			writer.close();
-		} catch (IOException e) {
-			System.out.println("IO Error...");
-			e.printStackTrace();
+			if (!(l1 instanceof Fisch)) {
+				System.err.println("Fressakteur ist kein Fisch: " + l1.getName());
+				continue;
+			}
+
+			Fisch fisch = (Fisch) l1;
+			System.out.println(l1.getName() + " versucht " + l2.getName() + " zu fressen...");
+
+			try {
+				fisch.fressen(l2);
+				System.out.println(fisch.getName() + " hat " + l2.getName() + " gefressen!");
+			} catch (MuellException e) {
+				e.printStackTrace();
+				System.out.println(l1.getName() + " kann keinen Müll verdauen.");
+			} catch (SchmecktNichtException e) {
+				e.printStackTrace();
+				System.out.println(l1.getName() + "'s Überzeugung hat den Fressakt verhindert.");
+			} catch (SattException e) {
+				e.printStackTrace();
+				System.out.println(l1.getName() + " möchte nichts mehr essen.");
+			} catch (EatYourFriendException e) {
+				e.printStackTrace();
+				System.out.println(l1.getName() + " frisst keine Freunde.");
+			}
 		}
 	}
 
@@ -111,7 +89,7 @@ public class Meer {
 				String[] parts = line.split(" ");
 
 				if (parts.length != 3) {
-					System.err.println("Geschichts-Zeile ist ungültig: " + line);
+					System.err.println("Geschichts-Zeile ist ungültig und wird übersprungen: " + line);
 					continue;
 				}
 
@@ -139,24 +117,42 @@ public class Meer {
 			while ((line = reader.readLine()) != null) {
 				String[] parts = line.split(",");
 
-				if (parts.length != 5) {
-					System.err.println("Fisch-Zeile ist ungültig: " + line);
+				if (parts.length < 4 || parts.length > 5) {
+					System.err.println("Fisch-Zeile ist ungültig und wird übersprungen: " + line);
 					continue;
 				}
 
-				int gewicht, appetit;
-				try {
-					gewicht = Integer.parseInt(parts[3].trim());
-					appetit = Integer.parseInt(parts[4].trim());
-				} catch (NumberFormatException e) {
-					e.printStackTrace();
-					System.err.println("Gewicht und/oder Appetit sind keine Integer: " + line);
-					continue;
+				Nahrungstyp typ = Nahrungstyp.vonName(parts[1].trim());
+				if (typ == Nahrungstyp.FISCH) {
+					int gewicht, appetit;
+					try {
+						gewicht = Integer.parseInt(parts[3].trim());
+						appetit = Integer.parseInt(parts[4].trim());
+					} catch (NumberFormatException e) {
+						e.printStackTrace();
+						System.err.println("Gewicht und/oder Appetit sind keine Integer: " + line);
+						continue;
+					}
+
+					Fisch fisch = new Fisch(parts[0].trim(), typ, Esstyp.vonName(parts[2].trim()), gewicht, appetit);
+					addFisch(fisch);
+					addLeckerbissen(fisch);
+				} else {
+					int anzahl, gewicht;
+					try {
+						anzahl = Integer.parseInt(parts[2].trim());
+						gewicht = Integer.parseInt(parts[3].trim());
+					} catch (NumberFormatException e) {
+						e.printStackTrace();
+						System.err.println("Anzahl und/oder Gewicht sind keine Integer: " + line);
+						continue;
+					}
+
+					for (int i = 0; i < anzahl; i++) {
+						addLeckerbissen(new Zeug(parts[0].trim(), Nahrungstyp.vonName(parts[1].trim()), gewicht));
+					}
 				}
 
-				Fisch fisch = new Fisch(parts[0].trim(), Nahrungstyp.vonName(parts[1].trim()), Esstyp.vonName(parts[2].trim()), gewicht, appetit);
-				addFisch(fisch);
-				addLeckerbissen(fisch);
 			}
 			reader.close();
 		} catch (IOException e) {
@@ -197,11 +193,6 @@ public class Meer {
 				for (int i = 0; i < anzahl; i++) {
 					addLeckerbissen(new Zeug(parts[0].trim(), Nahrungstyp.vonName(parts[1].trim()), gewicht));
 				}
-
-				// Zeug a = new Zeug("Stiefel", Nahrungstyp.MUELL, 100);
-				// Zeug b = new Zeug("Algen", Nahrungstyp.PFLANZE, 5);
-
-				// a.getGramm();
 
 			}
 			reader.close();
