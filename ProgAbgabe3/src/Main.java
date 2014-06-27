@@ -1,5 +1,9 @@
 import java.io.File;
 
+/** 
+ * Die Main-Klasse, welche die main-Methode enthält und eine Meer-Instanz macht
+ * @author fkoen001
+ */
 public class Main {
 
 	public static void main(String[] args) {
@@ -27,8 +31,9 @@ public class Main {
 
 		System.out.println("Gehe Geschichte durch ...");
 		System.out.println("-------------------------");
+
 		meer.displayStory();
-		
+
 		System.out.println("-------------------------");
 		System.out.println("Die Geschichte ist fertig");
 	}
